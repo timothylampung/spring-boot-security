@@ -38,8 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/sign_up").permitAll()
-                .and().httpBasic();
+                .antMatchers(HttpMethod.POST, "/sign_up","/swagger-ui.html").permitAll()
+                .and()
+                .addFilter(new JWTauthenticationFilter(authenticationManager()))
+                .addFilter(new JWTauthorizationFilter(authenticationManager(), customUserDetailService))
+        ;
     }
 
 
